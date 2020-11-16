@@ -2,8 +2,19 @@ from django.urls import path
 
 from restaurant import views
 
-app_name = 'polls'
+app_name = "restaurant"
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('<restaurant_name>/', views.get_restaurant_by_name, name='restaurant')
+    path("profile/<restaurant_id>/", views.get_restaurant_profile, name="profile"),
+    path(
+        "inspection_records/<restaurant_id>",
+        views.get_inspection_info,
+        name="inspection_history",
+    ),
+    path("", views.get_landing_page, name="browse"),
+    path("<page>", views.get_landing_page, name="browse"),
+    path(
+        "search_filter/restaurants_list/<page>",
+        views.get_restaurants_list,
+        name="restaurants_list",
+    ),
 ]
