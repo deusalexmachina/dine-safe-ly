@@ -1,9 +1,9 @@
 # Dine Safe.ly
 
-A restaurant search app to help NYC residents find establishments that have passed COVID-19 dine-in inspections.
+A dine-in search app that leverages daily inspection COVID data to locate restaurannts that have passed COVID-19 inspections.
 
 https://dine-safe-ly.herokuapp.com/
 
-Main branch:
-[![Build Status](https://travis-ci.com/gcivil-nyu-org/dine-safe-ly.svg?branch=main)](https://travis-ci.com/gcivil-nyu-org/dine-safe-ly)
-[![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/dine-safe-ly/badge.svg?branch=main)](https://coveralls.io/github/gcivil-nyu-org/dine-safe-ly?branch=main)
+TravisCI/Coverage:
+[![Build Status](https://travis-ci.com/deusalexmachina/dine-safe-ly.svg?branch=main)](https://travis-ci.com/deusalexmachina/dine-safe-ly)
+[![Coverage Status](https://coveralls.io/repos/github/deusalexmachina/dine-safe-ly/badge.svg)](https://coveralls.io/github/deusalexmachina/dine-safe-ly)
