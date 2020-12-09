@@ -8,7 +8,13 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dinesafelysite.settings")
 django.setup()
 
 from django.conf import settings
-from restaurant.models import Zipcodes, YelpRestaurantDetails, Categories
+from restaurant.models import (
+    Zipcodes,
+    YelpRestaurantDetails,
+    Categories,
+    Restaurant,
+    InspectionRecords,
+)
 from restaurant.utils import query_yelp
 
 logger = logging.getLogger(__name__)
@@ -38,7 +44,7 @@ def map_zipcode_to_neighbourhood():
 
 
 def save_yelp_categories():
-    access_token = settings.YELP_ACESS_TOKEN_BETA
+    access_token = settings.YELP_ACCESS_TOKEN_CATEGORY
     headers = {"Authorization": "bearer %s" % access_token}
     url = settings.YELP_CATEGORY_API
     response = requests.get(url, headers=headers)
@@ -72,7 +78,7 @@ def get_neighbourhood(zip):
 
 
 def get_restaurant_category_yelp(alias):
-    access_token = settings.YELP_ACESS_TOKEN_BETA
+    access_token = settings.YELP_ACCESS_TOKEN_CATEGORY
     headers = {"Authorization": "bearer %s" % access_token}
     url = settings.YELP_CATEGORY_API + alias
     response = requests.get(url, headers=headers)
@@ -167,6 +173,7 @@ def save_yelp_restaurant_details(business_id):
             logger.info(
                 "Yelp restaurant details successfully saved: {}".format(business_id)
             )
+            return details
     except Exception as e:
         logger.error(
             "Error while saving to table YelpRestaurantDetails: {} {}".format(
@@ -175,8 +182,49 @@ def save_yelp_restaurant_details(business_id):
         )
 
 
+def update_restuarant_inspection(restaurant):
+    if restaurant.business_id:
+        record = InspectionRecords.objects.filter(
+            business_id=restaurant.business_id
+        ).order_by("-inspected_on")[0:1]
+        if record:
+            Restaurant.objects.filter(business_id=restaurant.business_id).update(
+                compliant_status=record[0].is_roadway_compliant
+            )
+
+            logger.info(
+                "Compliance updated: {}  {}".format(
+                    restaurant.business_id, record[0].is_roadway_compliant
+                )
+            )
+
+    else:
+        record = InspectionRecords.objects.filter(
+            restaurant_name=restaurant.restaurant_name,
+            business_address=restaurant.business_address,
+            postcode=restaurant.postcode,
+        ).order_by("-inspected_on")[0:1]
+
+        if record:
+            Restaurant.objects.filter(
+                restaurant_name=restaurant.restaurant_name,
+                business_address=restaurant.business_address,
+                postcode=restaurant.postcode,
+            ).update(compliant_status=record[0].is_roadway_compliant)
+
+            logger.info(
+                "Compliance updated: {}  {}".format(
+                    restaurant.restaurant_name, record[0].is_roadway_compliant
+                )
+            )
+
+
 if __name__ == "__main__":
     # map_zipcode_to_neighbourhood()
     # save_yelp_restaurant_details()
-    # save_yelp_categories()
-    save_yelp_restaurant_details("-7PnG_cD9VY-IfHGWzynmQ")
+    save_yelp_categories()
+    # save_yelp_restaurant_details("-7PnG_cD9VY-IfHGWzynmQ")
+
+    # restaurants = Restaurant.objects.all()[2400:]
+    # for r in restaurants:
+    #     update_restuarant_inspection(r)

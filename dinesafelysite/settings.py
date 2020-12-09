@@ -30,11 +30,12 @@ load_dotenv(dotenv_path=env_path)
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
 # Application definition
+AUTH_USER_MODEL = "user.DineSafelyUser"
 
 INSTALLED_APPS = [
     "restaurant.apps.RestaurantConfig",
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    "mathfilters",
+    "chatbot.apps.ChatbotConfig",
 ]
 
 SITE_ID = os.environ.get("SITE_ID")
@@ -58,6 +61,7 @@ SITE_ID = os.environ.get("SITE_ID")
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
+    "django.contrib.auth.backends.AllowAllUsersModelBackend",
 ]
 
 MIDDLEWARE = [
@@ -142,17 +146,17 @@ STATICFILES_DIRS = [
 
 
 YELP_BUSINESS_API = "https://api.yelp.com/v3/businesses/"
-YELP_TOKEN_1 = os.environ.get("YELP_TOKEN_1")
+YELP_ACCESS_TOKEN_REVIEW = os.environ.get("YELP_ACCESS_TOKEN_REVIEW")
 
-YELP_ACCESS_TOKEN2 = os.environ.get("YELP_ACCESS_TOKEN2")
+YELP_ACCESS_TOKEN_BUSINESS_SEARCH = os.environ.get("YELP_ACCESS_TOKEN_BUSINESS_SEARCH")
 
-YELP_ACCESS_TOKE = os.environ.get("YELP_ACCESS_TOKE")
+YELP_ACCESS_TOKEN_BUSINESS_ID = os.environ.get("YELP_ACCESS_TOKEN_BUSINESS_ID")
 
 YELP_TOKEN_CHUANQI = os.environ.get("YELP_TOKEN_CHUANQI")
 
 # Yelp categories
 YELP_CATEGORY_API = "https://api.yelp.com/v3/categories"
-YELP_ACESS_TOKEN_BETA = os.environ.get("YELP_ACESS_TOKEN_BETA")
+YELP_ACCESS_TOKEN_CATEGORY = os.environ.get("YELP_ACCESS_TOKEN_CATEGORY")
 
 DEFAULT_IMAGE = (
     "https://www.theskinnypignyc.com/wp-content/uploads/2019/05/what"
@@ -183,7 +187,7 @@ LOGGING = {
     "loggers": {"": {"level": "INFO", "handlers": ["console", "file"]}},
 }
 
-LOGIN_URL = "login"
+LOGIN_URL = "user:login"
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
 
@@ -193,7 +197,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 SOCIALACCOUNT_QUERY_EMAIL = False
 SOCIALACCOUNT_EMAIL_REQUIRED = False
@@ -232,3 +236,6 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERSION": "v2.4",
     },
 }
+
+GOOGLE_MAP_KEY = os.environ.get("GOOGLE_MAP_KEY")
+GOOGLE_MAP_ID = os.environ.get("GOOGLE_MAP_ID")

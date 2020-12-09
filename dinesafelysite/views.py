@@ -1,20 +1,25 @@
 from django.shortcuts import render
-from restaurant.utils import (
-    get_restaurant_list,
-)
+from restaurant.utils import get_compliant_restaurant_list
 
-from django.core.serializers.json import DjangoJSONEncoder
-import json
 import logging
 
 logger = logging.getLogger(__name__)
 
-RESTAURANT_NUMBER = 12
+RESTAURANT_NUMBER = 18
 
 
 def index(request):
-    restaurant_list = get_restaurant_list(1, RESTAURANT_NUMBER)
+    restaurant_list = get_compliant_restaurant_list(
+        1,
+        RESTAURANT_NUMBER,
+        rating_filter=[3, 3.5, 4, 4.5, 5],
+        compliant_filter="Compliant",
+    )
     parameter_dict = {
-        "restaurant_list": json.dumps(restaurant_list, cls=DjangoJSONEncoder),
+        "restaurant_list": restaurant_list,
     }
     return render(request, "index.html", parameter_dict)
+
+
+def terms(request):
+    return render(request, "terms.html")

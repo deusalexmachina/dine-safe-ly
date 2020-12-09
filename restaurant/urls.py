@@ -17,4 +17,15 @@ urlpatterns = [
         views.get_restaurants_list,
         name="restaurants_list",
     ),
+    path(
+        "save/favorite/restaurant/<business_id>",
+        views.save_favorite_restaurant,
+        name="save_favorite_restaurant",
+    ),
+    path(
+        "delete/favorite/restaurant/<business_id>",
+        views.delete_favorite_restaurant,
+        name="delete_favorite_restaurant",
+    ),
+    path("chatbot/keywordtest", views.chatbot_keyword, name="chatbottest"),
 ]
